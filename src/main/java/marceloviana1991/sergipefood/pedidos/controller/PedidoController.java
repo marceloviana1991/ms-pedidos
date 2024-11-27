@@ -1,5 +1,6 @@
 package marceloviana1991.sergipefood.pedidos.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
