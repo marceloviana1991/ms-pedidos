@@ -7,6 +7,7 @@ import marceloviana1991.sergipefood.pedidos.dto.PedidoResponseDto;
 import marceloviana1991.sergipefood.pedidos.model.Status;
 import marceloviana1991.sergipefood.pedidos.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,10 @@ public class PedidoController {
     public ResponseEntity<Void> aprovaPagamento(@PathVariable @NotNull Long id) {
         service.updateStatusPagoPedido(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/porta")
+    public String retornaPorta(@Value("${local.server.port}") String porta){
+        return String.format("Requisição respondida pela instância executando na porta %s", porta);
     }
 }
