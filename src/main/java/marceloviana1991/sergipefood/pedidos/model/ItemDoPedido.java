@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import marceloviana1991.sergipefood.pedidos.dto.ItemDoPedidoResponseDto;
+import marceloviana1991.sergipefood.pedidos.dto.ItemDoPedidoRequestDto;
 
 @Entity
 @Table(name = "item_do_pedido")
@@ -29,9 +29,9 @@ public class ItemDoPedido {
     @ManyToOne(optional=false)
     private Pedido pedido;
 
-    public ItemDoPedido(ItemDoPedidoResponseDto itemDoPedidoResponseDto, Pedido pedido) {
-        this.quantidade = itemDoPedidoResponseDto.quantidade();
-        this.descricao = itemDoPedidoResponseDto.descricao();
+    public ItemDoPedido(ItemDoPedidoRequestDto itemDoPedidoRequestDto, Pedido pedido) {
+        this.quantidade = itemDoPedidoRequestDto.quantidade();
+        this.descricao = itemDoPedidoRequestDto.descricao();
         this.pedido = pedido;
     }
 }
