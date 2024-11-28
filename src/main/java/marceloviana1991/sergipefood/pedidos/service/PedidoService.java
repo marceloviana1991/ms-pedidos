@@ -62,4 +62,10 @@ public class PedidoService {
         repository.save(pedido);
         return new PedidoResponseDto(pedido);
     }
+
+    @Transactional
+    public void aprovaPagamento(Long id) {
+        Pedido pedido = repository.getReferenceById(id);
+        pedido.setStatus(Status.PAGO);
+    }
 }

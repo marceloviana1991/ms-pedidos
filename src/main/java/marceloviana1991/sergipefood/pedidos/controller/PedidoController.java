@@ -59,6 +59,11 @@ public class PedidoController {
         service.reenviarPagamento(id);
     }
 
+    @PutMapping("/{id}/pago")
+    public void aprovaPagamento(@PathVariable Long id) {
+        service.aprovaPagamento(id);
+    }
+
     @GetMapping("/porta")
     public String retornaPorta(@Value("${local.server.port}") String porta){
         return String.format("Requisição respondida pela instância executando na porta %s", porta);
