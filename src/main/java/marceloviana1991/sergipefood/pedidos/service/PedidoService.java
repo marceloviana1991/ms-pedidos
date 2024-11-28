@@ -3,6 +3,7 @@ package marceloviana1991.sergipefood.pedidos.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import marceloviana1991.sergipefood.pedidos.dto.PagamentoRequestDto;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
@@ -39,27 +40,22 @@ public class PedidoService {
     public PedidoResponseDto savePedido(PedidoRequestDto requestDto) {
         Pedido pedido = new Pedido(requestDto);
         repository.save(pedido);
-        PagamentoRequestDto requestClientDto = new PagamentoRequestDto(requestDto, pedido);
+        try {
+            PagamentoRequestDto requestClientDto = new PagamentoRequestDto(pedido);
+            pagamento.savePagamento(requestClientDto);
+            return new PedidoResponseDto(pedido);
+        } catch (Exception e) {
+            pedido.setStatus(Status.PENDENTE);
+            System.out.println(e.getMessage());
+            return new PedidoResponseDto(pedido);
+        }
+    }
+
+    @Transactional
+    public void reenviarPagamento(@NotNull Long id) {
+        Pedido pedido = repository.getReferenceById(id);
+        PagamentoRequestDto requestClientDto = new PagamentoRequestDto(pedido);
         pagamento.savePagamento(requestClientDto);
-        return new PedidoResponseDto(pedido);
-    }
-
-    @Transactional
-    public PedidoResponseDto updateStatusPedido(Long id, Status status) {
-        Pedido pedido = repository.porIdComItens(id);
-        if (pedido == null) {
-            throw new EntityNotFoundException();
-        }
-        pedido.setStatus(status);
-        return new PedidoResponseDto(pedido);
-    }
-
-    @Transactional
-    public void updateStatusPagoPedido(Long id) {
-        Pedido pedido = repository.porIdComItens(id);
-        if (pedido == null) {
-            throw new EntityNotFoundException();
-        }
-        pedido.setStatus(Status.PAGO);
+        pedido.setStatus(Status.REALIZADO);
     }
 }

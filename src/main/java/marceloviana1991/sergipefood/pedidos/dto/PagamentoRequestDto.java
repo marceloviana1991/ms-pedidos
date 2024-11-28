@@ -7,15 +7,13 @@ import java.math.BigDecimal;
 public record PagamentoRequestDto(
         BigDecimal valor,
         String nome,
-        Long pedidoId,
-        Long formaDePagamentoId
+        Long pedidoId
 ) {
-    public PagamentoRequestDto(PedidoRequestDto pedidoDto, Pedido pedido) {
+    public PagamentoRequestDto(Pedido pedido) {
         this(
-                pedidoDto.valor(),
-                pedidoDto.nome(),
-                pedido.getId(),
-                pedidoDto.formaDePagamentoId()
+                pedido.getValor(),
+                pedido.getNome(),
+                pedido.getId()
         );
     }
 }

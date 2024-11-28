@@ -6,7 +6,6 @@ import java.util.List;
 public record PedidoRequestDto(
         BigDecimal valor,
         String nome,
-        Long formaDePagamentoId,
         List<ItemDoPedidoRequestDto> itens
 ) {
 }

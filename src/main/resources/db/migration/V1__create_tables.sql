@@ -1,5 +1,7 @@
 CREATE TABLE pedidos (
   id bigint(20) NOT NULL AUTO_INCREMENT,
+  valor decimal(19,2) NOT NULL,
+   nome varchar(100) DEFAULT NULL,
   data_hora datetime NOT NULL,
   status varchar(255) NOT NULL,
   PRIMARY KEY (id)

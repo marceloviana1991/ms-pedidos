@@ -37,23 +37,16 @@ public class PedidoController {
     }
 
     @PostMapping
-    public ResponseEntity<PedidoResponseDto> savePagamento(@RequestBody @Valid PedidoRequestDto requestDto,
+    public ResponseEntity<PedidoResponseDto> savePedido(@RequestBody @Valid PedidoRequestDto requestDto,
                                                            UriComponentsBuilder uriComponentsBuilder) {
         PedidoResponseDto responseDto = service.savePedido(requestDto);
         URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<PedidoResponseDto> atualizaStatus(@PathVariable Long id, @RequestBody Status status){
-        PedidoResponseDto responseDto = service.updateStatusPedido(id, status);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @PutMapping("/{id}/pago")
-    public ResponseEntity<Void> aprovaPagamento(@PathVariable @NotNull Long id) {
-        service.updateStatusPagoPedido(id);
-        return ResponseEntity.ok().build();
+    @PostMapping("/{id}")
+    public void reenviarPagamento(@PathVariable @NotNull Long id) {
+        service.reenviarPagamento(id);
     }
 
     @GetMapping("/porta")
