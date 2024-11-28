@@ -1,6 +1,7 @@
 package marceloviana1991.sergipefood.pedidos.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
@@ -37,9 +38,18 @@ public class PedidoController {
     }
 
     @PostMapping
+    @CircuitBreaker(name = "pagamentoCB", fallbackMethod = "savePedidoStatusPendente")
     public ResponseEntity<PedidoResponseDto> savePedido(@RequestBody @Valid PedidoRequestDto requestDto,
                                                            UriComponentsBuilder uriComponentsBuilder) {
         PedidoResponseDto responseDto = service.savePedido(requestDto);
+        URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
+        return ResponseEntity.created(uri).body(responseDto);
+    }
+
+    public ResponseEntity<PedidoResponseDto> savePedidoStatusPendente(@RequestBody @Valid PedidoRequestDto requestDto,
+                                                                      UriComponentsBuilder uriComponentsBuilder,
+                                                                      Exception e) {
+        PedidoResponseDto responseDto = service.savePedidoPendente(requestDto);
         URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
         return ResponseEntity.created(uri).body(responseDto);
     }

@@ -1,8 +1,10 @@
 package marceloviana1991.sergipefood.pedidos.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import marceloviana1991.sergipefood.pedidos.dto.PagamentoRequestDto;
@@ -40,15 +42,9 @@ public class PedidoService {
     public PedidoResponseDto savePedido(PedidoRequestDto requestDto) {
         Pedido pedido = new Pedido(requestDto);
         repository.save(pedido);
-        try {
-            PagamentoRequestDto requestClientDto = new PagamentoRequestDto(pedido);
-            pagamento.savePagamento(requestClientDto);
-            return new PedidoResponseDto(pedido);
-        } catch (Exception e) {
-            pedido.setStatus(Status.PENDENTE);
-            System.out.println(e.getMessage());
-            return new PedidoResponseDto(pedido);
-        }
+        PagamentoRequestDto requestClientDto = new PagamentoRequestDto(pedido);
+        pagamento.savePagamento(requestClientDto);
+        return new PedidoResponseDto(pedido);
     }
 
     @Transactional
@@ -57,5 +53,13 @@ public class PedidoService {
         PagamentoRequestDto requestClientDto = new PagamentoRequestDto(pedido);
         pagamento.savePagamento(requestClientDto);
         pedido.setStatus(Status.REALIZADO);
+    }
+
+    @Transactional
+    public PedidoResponseDto savePedidoPendente(PedidoRequestDto requestDto) {
+        Pedido pedido = new Pedido(requestDto);
+        pedido.setStatus(Status.PENDENTE);
+        repository.save(pedido);
+        return new PedidoResponseDto(pedido);
     }
 }
