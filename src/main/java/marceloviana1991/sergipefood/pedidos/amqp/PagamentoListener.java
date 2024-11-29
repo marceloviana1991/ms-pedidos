@@ -1,5 +1,6 @@
 package marceloviana1991.sergipefood.pedidos.amqp;
 
+import marceloviana1991.sergipefood.pedidos.dto.PedidoResponseDto;
 import marceloviana1991.sergipefood.pedidos.service.PedidoService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,5 +15,7 @@ public class PagamentoListener {
     @RabbitListener(queues = "pagamento.concluido")
     public void recebeMensagem(Long id) {
         service.aprovaPagamento(id);
+        PedidoResponseDto responseDto = service.getPedido(id);
+        System.out.println(responseDto);
     }
 }
