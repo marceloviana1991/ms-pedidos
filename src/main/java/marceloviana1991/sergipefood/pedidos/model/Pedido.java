@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +28,6 @@ public class Pedido {
     private Long id;
 
     @NotNull
-    @Positive
-    private BigDecimal valor;
-
-    @NotBlank
-    @Size(max=100)
-    private String nome;
-
-    @NotNull
     private LocalDateTime dataHora;
 
     @NotNull @Enumerated(EnumType.STRING)
@@ -47,10 +38,8 @@ public class Pedido {
 
 
     public Pedido(PedidoRequestDto requestDto) {
-        this.valor = requestDto.valor();
-        this.nome = requestDto.nome();
         this.dataHora = LocalDateTime.now();
-        this.status = Status.REALIZADO;
+        this.status = Status.CRIADO;
         this.itens = requestDto.itens().stream().map(item -> new ItemDoPedido(item, this)).toList();
 
     }

@@ -1,13 +1,13 @@
 package marceloviana1991.sergipefood.pedidos.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import marceloviana1991.sergipefood.pedidos.dto.PagamentoRequestDto;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoResponseDto;
-import marceloviana1991.sergipefood.pedidos.model.Status;
 import marceloviana1991.sergipefood.pedidos.service.PedidoService;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +26,9 @@ public class PedidoController {
     @Autowired
     private PedidoService service;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @GetMapping
     public List<PedidoResponseDto> getPagePedidos(@PageableDefault(size = 10) Pageable pageable) {
         return service.getAllPedidos(pageable);
@@ -38,25 +41,14 @@ public class PedidoController {
     }
 
     @PostMapping
-    @CircuitBreaker(name = "pagamentoCB", fallbackMethod = "savePedidoStatusPendente")
     public ResponseEntity<PedidoResponseDto> savePedido(@RequestBody @Valid PedidoRequestDto requestDto,
                                                            UriComponentsBuilder uriComponentsBuilder) {
         PedidoResponseDto responseDto = service.savePedido(requestDto);
         URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
+        PagamentoRequestDto pagamentoRequestDto = new PagamentoRequestDto(
+                requestDto.valor(), requestDto.nome(), responseDto.id());
+        rabbitTemplate.convertAndSend("pedido.registrado", pagamentoRequestDto);
         return ResponseEntity.created(uri).body(responseDto);
-    }
-
-    public ResponseEntity<PedidoResponseDto> savePedidoStatusPendente(@RequestBody @Valid PedidoRequestDto requestDto,
-                                                                      UriComponentsBuilder uriComponentsBuilder,
-                                                                      Exception e) {
-        PedidoResponseDto responseDto = service.savePedidoPendente(requestDto);
-        URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
-        return ResponseEntity.created(uri).body(responseDto);
-    }
-
-    @PostMapping("/{id}")
-    public void reenviarPagamento(@PathVariable @NotNull Long id) {
-        service.reenviarPagamento(id);
     }
 
     @PutMapping("/{id}/pago")

@@ -9,8 +9,6 @@ import java.util.List;
 
 public record PedidoResponseDto(
         Long id,
-        BigDecimal valor,
-        String nome,
         LocalDateTime dataHora,
         Status status,
         List<ItemDoPedidoResponseDto>itens
@@ -18,8 +16,6 @@ public record PedidoResponseDto(
     public PedidoResponseDto(Pedido pedido) {
         this(
                 pedido.getId(),
-                pedido.getValor(),
-                pedido.getNome(),
                 pedido.getDataHora(),
                 pedido.getStatus(),
                 pedido.getItens().stream().map(ItemDoPedidoResponseDto::new).toList()
