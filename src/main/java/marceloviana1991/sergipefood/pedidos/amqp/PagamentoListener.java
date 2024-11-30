@@ -15,6 +15,6 @@ public class PagamentoListener {
     @RabbitListener(queues = "pagamento.concluido")
     public void recebeMensagem(Long id) {
         PedidoResponseDto responseDto = service.aprovaPagamento(id);
-        System.out.println(responseDto);
+        System.out.println(id);
     }
 }
