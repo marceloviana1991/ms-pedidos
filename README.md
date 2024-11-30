@@ -1,7 +1,5 @@
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://192.168.9.212:43839*
-
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *PedidoControllerApi* | [**aprovaPagamento**](docs/PedidoControllerApi.md#aprovaPagamento) | **PUT** /pedidos/{id}/pago | 
