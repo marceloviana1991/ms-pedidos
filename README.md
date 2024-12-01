@@ -66,7 +66,7 @@ http://localhost:8082/pedidos-ms/pedidos
 | POST | savePedido | Cria um novo pedido a ser processado |
 | GET | getPagePedidos | Pesquisa por todos os pedido realizados | 
 | GET | getPedido | Consulta todas as informações de um pedido através de um ```id``` .|
-| PUT | aprovaPagamento | Atualiza o status do pedido para confirmado | 
+| PUT | aprovaPagamento | Acessado na rota ```/confirmar/```. Atualiza o status do pedido para confirmado através de um ```ìd``` |
 
 
 ### Body Content
