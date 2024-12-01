@@ -24,14 +24,15 @@ public class ItemDoPedido {
     @Positive
     private Integer quantidade;
 
-    private String descricao;
-
     @ManyToOne(optional=false)
     private Pedido pedido;
 
-    public ItemDoPedido(ItemDoPedidoRequestDto itemDoPedidoRequestDto, Pedido pedido) {
+    @ManyToOne
+    private Produto produto;
+
+    public ItemDoPedido(ItemDoPedidoRequestDto itemDoPedidoRequestDto, Pedido pedido, Produto produto) {
         this.quantidade = itemDoPedidoRequestDto.quantidade();
-        this.descricao = itemDoPedidoRequestDto.descricao();
         this.pedido = pedido;
+        this.produto = produto;
     }
 }

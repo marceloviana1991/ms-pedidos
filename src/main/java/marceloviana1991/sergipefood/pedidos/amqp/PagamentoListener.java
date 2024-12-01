@@ -1,7 +1,6 @@
 package marceloviana1991.sergipefood.pedidos.amqp;
 
 import marceloviana1991.sergipefood.pedidos.dto.PagamentoResponseDto;
-import marceloviana1991.sergipefood.pedidos.dto.PedidoResponseDto;
 import marceloviana1991.sergipefood.pedidos.service.PedidoService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

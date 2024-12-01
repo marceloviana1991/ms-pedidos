@@ -5,13 +5,13 @@ import marceloviana1991.sergipefood.pedidos.model.ItemDoPedido;
 public record ItemDoPedidoResponseDto(
         Long id,
         Integer quantidade,
-        String descricao
+        Long idProduto
 ) {
     public ItemDoPedidoResponseDto(ItemDoPedido itemDoPedido) {
         this(
                 itemDoPedido.getId(),
                 itemDoPedido.getQuantidade(),
-                itemDoPedido.getDescricao()
+                itemDoPedido.getProduto().getId()
         );
     }
 }

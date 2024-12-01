@@ -6,7 +6,6 @@ import marceloviana1991.sergipefood.pedidos.dto.PagamentoRequestDto;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoRequestDto;
 import marceloviana1991.sergipefood.pedidos.dto.PedidoResponseDto;
 import marceloviana1991.sergipefood.pedidos.service.PedidoService;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,10 +43,9 @@ public class PedidoController {
     public ResponseEntity<PedidoResponseDto> savePedido(@RequestBody @Valid PedidoRequestDto requestDto,
                                                            UriComponentsBuilder uriComponentsBuilder) {
         PedidoResponseDto responseDto = service.savePedido(requestDto);
+        double valorTotal = service.getValorTotal(requestDto.itens());
         URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
-        PagamentoRequestDto pagamentoRequestDto = new PagamentoRequestDto(
-                requestDto.valor(), requestDto.nome() ,responseDto.id());
-        rabbitTemplate.convertAndSend("pedido.registrado", pagamentoRequestDto);
+        rabbitTemplate.convertAndSend("pedido.registrado", new PagamentoRequestDto(valorTotal, responseDto.id()));
         return ResponseEntity.created(uri).body(responseDto);
     }
 
