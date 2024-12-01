@@ -36,9 +36,8 @@ public class PedidoService {
     }
 
     @Transactional
-    public PedidoResponseDto aprovaPagamento(Long id) {
+    public void aprovaPagamento(Long id) {
         Pedido pedido = repository.getReferenceById(id);
         pedido.setStatus(Status.CONFIRMADO);
-        return new PedidoResponseDto(pedido);
     }
 }

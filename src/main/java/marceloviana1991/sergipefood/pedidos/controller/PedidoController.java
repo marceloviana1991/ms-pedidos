@@ -46,7 +46,7 @@ public class PedidoController {
         PedidoResponseDto responseDto = service.savePedido(requestDto);
         URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(responseDto.id()).toUri();
         PagamentoRequestDto pagamentoRequestDto = new PagamentoRequestDto(
-                requestDto.valor(), requestDto.nome(), responseDto.id());
+                requestDto.valor(), requestDto.nome() ,responseDto.id());
         rabbitTemplate.convertAndSend("pedido.registrado", pagamentoRequestDto);
         return ResponseEntity.created(uri).body(responseDto);
     }
