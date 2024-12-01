@@ -31,12 +31,12 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public List<ProdutoResponseDto> getPagePedidos(@PageableDefault(size = 10) Pageable pageable) {
+    public List<ProdutoResponseDto> getPageProdutos(@PageableDefault(size = 10) Pageable pageable) {
         return service.getAllProdutos(pageable);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDto> getPedido(@PathVariable @NotNull Long id) {
+    public ResponseEntity<ProdutoResponseDto> getProduto(@PathVariable @NotNull Long id) {
         ProdutoResponseDto responseDto = service.getProduto(id);
         return ResponseEntity.ok(responseDto);
     }
