@@ -30,6 +30,26 @@ http://localhost:8082/pedidos-ms/produtos
 | GET | getProduto | Consulta todas as informações de um produto através de um ```id``` .| 
 
 
+### Body Content
+
+```
+Resquest
+{
+    "nome": String,
+    "preco": Long
+}
+```
+
+```
+Response
+{
+    "id": Long
+    "nome": String,
+    "preco": Double
+}
+```
+
+
 ## Pedidos
 
 Recurso utilizado para registrar os itens de um pedido contendo a quantidade de cada produto em cada item, a data do pedido e o status de confirmação do pagamento
@@ -48,3 +68,36 @@ http://localhost:8082/pedidos-ms/pedidos
 | GET | getPedido | Consulta todas as informações de um pedido através de um ```id``` .|
 | PUT | aprovaPagamento | Atualiza o status do pedido para confirmado | 
 
+
+### Body Content
+
+```
+Resquest
+{
+    "itens":
+        [
+            {
+                "quantidade": Integer,
+                "produtoId": Long
+            }
+        ]
+}
+
+
+```
+
+```
+Response
+{
+    "id": Long,
+    "dataHora": LocalDateTime,
+    "status": ["CONFIRMADO", "CRIADO"],
+    "itens":
+        [
+            {
+                "quantidade": Integer,
+                "produtoId": Long
+            }
+        ]
+}
+```
