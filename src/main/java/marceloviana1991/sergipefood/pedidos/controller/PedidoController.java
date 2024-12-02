@@ -49,7 +49,7 @@ public class PedidoController {
         return ResponseEntity.created(uri).body(responseDto);
     }
 
-    @PutMapping("/{id}/pago")
+    @PutMapping("/confirmar/{id}")
     public void aprovaPagamento(@PathVariable Long id) {
         service.aprovaPagamento(id);
     }
